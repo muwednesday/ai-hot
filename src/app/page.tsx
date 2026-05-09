@@ -119,6 +119,7 @@ function groupByDate(items: any[]) {
     const date = new Date(item.publishedAt).toLocaleDateString("zh-CN", {
       month: "long",
       day: "numeric",
+      timeZone: "Asia/Shanghai",
     });
     if (!map[date]) map[date] = [];
     map[date].push(item);

@@ -33,6 +33,7 @@ export function ItemCard({ item }: ItemCardProps) {
   const time = new Date(item.publishedAt).toLocaleTimeString("zh-CN", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Shanghai",
   });
 
   return (

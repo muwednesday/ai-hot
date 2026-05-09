@@ -29,12 +29,6 @@ export default function AgentPage() {
                     GET /api/public/items?mode=all&amp;cursor=xxx
                   </code>
                 </div>
-                <div>
-                  <p className="font-medium mb-1">获取最新日报</p>
-                  <code className="text-xs bg-secondary px-2 py-1 rounded block overflow-x-auto">
-                    GET /api/public/daily
-                  </code>
-                </div>
                 <div className="text-xs text-muted-foreground">
                   参数: mode (selected|all), category, since (ISO date), q
                   (搜索), take (1-100), cursor (分页)
@@ -63,15 +57,6 @@ export default function AgentPage() {
                     className="text-primary hover:underline text-xs"
                   >
                     /feed/all.xml
-                  </a>
-                </div>
-                <div>
-                  <span className="font-medium">日报: </span>
-                  <a
-                    href="/feed/daily.xml"
-                    className="text-primary hover:underline text-xs"
-                  >
-                    /feed/daily.xml
                   </a>
                 </div>
               </div>
