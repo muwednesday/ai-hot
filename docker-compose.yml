@@ -1,0 +1,35 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.docker
+    environment:
+      - DATABASE_URL=postgresql://postgres:aihot_pg_2026@db:5432/aihot
+      - DIRECT_URL=postgresql://postgres:aihot_pg_2026@db:5432/aihot
+      - DEEPSEEK_MODEL=deepseek-chat
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=aihot_pg_2026
+      - POSTGRES_DB=aihot
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:

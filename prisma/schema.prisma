@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+}
+
+model Source {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  type      String   // "rss", "x_user", "hn", "arxiv", "web"
+  url       String?
+  xUsername String?
+  enabled   Boolean  @default(true)
+  items     Item[]
+  createdAt DateTime @default(now())
+}
+
+model Item {
+  id             String    @id @default(cuid())
+  sourceId       String
+  source         Source    @relation(fields: [sourceId], references: [id])
+  title          String?
+  titleZh        String?
+  url            String    @unique
+  content        String?
+  summaryZh      String?
+  curatorNote    String?
+
+  publishedAt    DateTime
+  fetchedAt      DateTime  @default(now())
+
+  // AI scoring
+  aiRelevance    Int?
+  aiSelected     Boolean   @default(false)
+  aiCategory     String?   // "ai-models", "ai-products", "industry", "paper", "tip"
+  aiTags         String[]  @default([])
+  aiSummary      String?
+  processedAt    DateTime?
+
+  // Dedup / clustering
+  duplicateOfId  String?
+  clusterId      String?
+  isClusterPrimary Boolean @default(false)
+
+  // Related discussions
+  relatedDiscussions Json?
+
+  // Images
+  imageUrls      String[]  @default([])
+
+  // Hot score
+  hotScore       Int       @default(0)
+  hotScoreUpdatedAt DateTime?
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([publishedAt(sort: Desc)])
+  @@index([aiSelected, publishedAt(sort: Desc)])
+  @@index([aiCategory, publishedAt(sort: Desc)])
+  @@index([sourceId])
+  @@index([duplicateOfId])
+}
+
+model Daily {
+  id        String    @id @default(cuid())
+  date      DateTime  @unique
+  lead      Json      // { title, summary }
+  sections  Json      // [{ label, items: [...itemIds] }]
+  itemCount Int
+  createdAt DateTime  @default(now())
+
+  @@index([date(sort: Desc)])
+}
