@@ -8,146 +8,46 @@ const prisma = new PrismaClient();
 
 async function main() {
   const sources = [
-    // X/Twitter via RSSHub
-    {
-      name: "Rohan Paul",
-      slug: "rohanpaul-x",
-      type: "x_user",
-      xUsername: "rohanpaul_ai",
-    },
-    {
-      name: "Jim Fan",
-      slug: "jimfan-x",
-      type: "x_user",
-      xUsername: "DrJimFan",
-    },
-    {
-      name: "Berryxia.AI",
-      slug: "berryxia-x",
-      type: "x_user",
-      xUsername: "berryxia",
-    },
-    {
-      name: "宝玉",
-      slug: "dotey-x",
-      type: "x_user",
-      xUsername: "dotey",
-    },
-    {
-      name: "歸藏",
-      slug: "guizang-x",
-      type: "x_user",
-      xUsername: "op7418",
-    },
-    {
-      name: "阿绎 AYi",
-      slug: "ayi-x",
-      type: "x_user",
-      xUsername: "AYi_AInotes",
-    },
-    {
-      name: "向阳乔木",
-      slug: "vista8-x",
-      type: "x_user",
-      xUsername: "vista8",
-    },
-    {
-      name: "邵猛",
-      slug: "shaomeng-x",
-      type: "x_user",
-      xUsername: "shao__meng",
-    },
-    {
-      name: "Ant Ling",
-      slug: "antling-x",
-      type: "x_user",
-      xUsername: "AntLingAGI",
-    },
-    {
-      name: "小互",
-      slug: "xiaohu-x",
-      type: "x_user",
-      xUsername: "xiaohu",
-    },
-    {
-      name: "OpenAI",
-      slug: "openai-x",
-      type: "x_user",
-      xUsername: "OpenAI",
-    },
-    {
-      name: "Anthropic",
-      slug: "anthropic-x",
-      type: "x_user",
-      xUsername: "AnthropicAI",
-    },
+    // X/Twitter via Nitter RSS
+    { name: "Garry Tan", slug: "garrytan-x", type: "x_user", xUsername: "garrytan" },
+    { name: "Andrew Ng", slug: "andrewyng-x", type: "x_user", xUsername: "AndrewYNg" },
+    { name: "a16z", slug: "a16z-x", type: "x_user", xUsername: "a16z" },
+    { name: "OpenAI", slug: "openai-x", type: "x_user", xUsername: "OpenAI" },
+    { name: "Anthropic", slug: "anthropic-x", type: "x_user", xUsername: "AnthropicAI" },
+    { name: "Sam Altman", slug: "sama-x", type: "x_user", xUsername: "sama" },
+    { name: "Andrej Karpathy", slug: "karpathy-x", type: "x_user", xUsername: "karpathy" },
+    { name: "Boris Cherny", slug: "bcherny-x", type: "x_user", xUsername: "bcherny" },
+    { name: "Terry Rodriguez", slug: "trq212-x", type: "x_user", xUsername: "trq212" },
+    { name: "Lex Fridman", slug: "lexfridman-x", type: "x_user", xUsername: "lexfridman" },
+    { name: "Geoffrey Hinton", slug: "hinton-x", type: "x_user", xUsername: "geoffreyhinton" },
+    { name: "Margaret Mitchell", slug: "mmitchell-x", type: "x_user", xUsername: "mmitchell_ai" },
+    { name: "Raju PP", slug: "rajupp-x", type: "x_user", xUsername: "rajupp" },
+    { name: "Yoav Goldberg", slug: "yoavgo-x", type: "x_user", xUsername: "yoavgo" },
+    { name: "hardmaru", slug: "hardmaru-x", type: "x_user", xUsername: "hardmaru" },
+    { name: "Mikko Hyppönen", slug: "mikko-x", type: "x_user", xUsername: "mikko" },
 
     // RSS sources
-    {
-      name: "IT之家",
-      slug: "ithome",
-      type: "rss",
-      url: "https://rsshub.app/ithome",
-    },
-    {
-      name: "机器之心",
-      slug: "jiqizhixin",
-      type: "rss",
-      url: "https://rsshub.app/jiqizhixin/latest",
-    },
-    {
-      name: "量子位",
-      slug: "qbitai",
-      type: "rss",
-      url: "https://rsshub.app/qbitai",
-    },
-    {
-      name: "Hugging Face Blog",
-      slug: "huggingface-blog",
-      type: "rss",
-      url: "https://huggingface.co/blog/feed.xml",
-    },
-    {
-      name: "GitHub Blog",
-      slug: "github-blog",
-      type: "rss",
-      url: "https://github.blog/feed/",
-    },
-    {
-      name: "BAIR Blog",
-      slug: "bair-blog",
-      type: "rss",
-      url: "https://bair.berkeley.edu/blog/feed.xml",
-    },
-    {
-      name: "HN 中文翻译",
-      slug: "buzzing-hn",
-      type: "rss",
-      url: "https://www.buzzing.cc/feed",
-    },
-    {
-      name: "The Verge AI",
-      slug: "verge-ai",
-      type: "rss",
-      url: "https://www.theverge.com/ai-artificial-intelligence/rss/index.xml",
-    },
-    {
-      name: "TechCrunch AI",
-      slug: "tc-ai",
-      type: "rss",
-      url: "https://techcrunch.com/category/artificial-intelligence/feed/",
-    },
-    {
-      name: "Claude Code Releases",
-      slug: "claude-code-releases",
-      type: "rss",
-      url: "https://github.com/anthropics/claude-code/releases.atom",
-    },
+    { name: "GitHub Blog", slug: "github-blog", type: "rss", url: "https://github.blog/feed/" },
+    { name: "BAIR Blog", slug: "bair-blog", type: "rss", url: "https://bair.berkeley.edu/blog/feed.xml" },
+    { name: "TechCrunch AI", slug: "tc-ai", type: "rss", url: "https://techcrunch.com/category/artificial-intelligence/feed/" },
+    { name: "量子位", slug: "qbitai", type: "rss", url: "https://www.qbitai.com/feed" },
+    { name: "Claude Code Releases", slug: "claude-code-releases", type: "rss", url: "https://github.com/anthropics/claude-code/releases.atom" },
 
     // Aggregated sources
     { name: "Hacker News", slug: "hn", type: "hn" },
     { name: "arXiv AI", slug: "arxiv-ai", type: "arxiv" },
   ];
+
+  // Disable old sources not in the new list
+  const newSlugs = new Set(sources.map(s => s.slug));
+  const oldSources = await prisma.source.findMany({ where: { slug: { notIn: Array.from(newSlugs) } } });
+  if (oldSources.length > 0) {
+    await prisma.source.updateMany({
+      where: { slug: { notIn: Array.from(newSlugs) } },
+      data: { enabled: false },
+    });
+    console.log(`已禁用 ${oldSources.length} 个旧源: ${oldSources.map(s => s.name).join(", ")}`);
+  }
 
   for (const source of sources) {
     await prisma.source.upsert({
@@ -157,7 +57,8 @@ async function main() {
     });
   }
 
-  console.log(`Seeded ${sources.length} sources`);
+  const active = await prisma.source.count({ where: { enabled: true } });
+  console.log(`Seeded ${sources.length} sources, 共 ${active} 个活跃`);
 }
 
 main()

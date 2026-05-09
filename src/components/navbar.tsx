@@ -8,7 +8,6 @@ import { MobileNav } from "./mobile-nav";
 const NAV_ITEMS = [
   { href: "/", label: "精选", matchExact: true },
   { href: "/all", label: "全部动态", matchExact: false },
-  { href: "/daily", label: "日报", matchExact: false },
 ];
 
 export function Navbar() {

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { ItemCard } from "@/components/item-card";
 import { CategoryFilter } from "@/components/category-filter";
 import { SearchBar } from "@/components/search-bar";
+import { DateHeader } from "@/components/date-header";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
@@ -67,8 +68,15 @@ export default async function AllPage({
         </div>
 
         <div className="space-y-3">
-          {items.map((item) => (
-            <ItemCard key={item.id} item={item} />
+          {Object.entries(groupByDate(items)).map(([date, dateItems]) => (
+            <section key={date} className="mb-6">
+              <DateHeader date={date} />
+              <div className="space-y-3 mt-3">
+                {dateItems.map((item: any) => (
+                  <ItemCard key={item.id} item={item} />
+                ))}
+              </div>
+            </section>
           ))}
         </div>
 
@@ -107,4 +115,18 @@ export default async function AllPage({
       <Footer />
     </>
   );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function groupByDate(items: any[]) {
+  const map: Record<string, any[]> = {};
+  for (const item of items) {
+    const date = new Date(item.publishedAt).toLocaleDateString("zh-CN", {
+      month: "long",
+      day: "numeric",
+    });
+    if (!map[date]) map[date] = [];
+    map[date].push(item);
+  }
+  return map;
 }

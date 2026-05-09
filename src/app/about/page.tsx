@@ -4,13 +4,12 @@ import { Footer } from "@/components/footer";
 const DATA_SOURCES = [
   { name: "Hacker News", type: "API", desc: "科技热门 AI 相关帖子" },
   { name: "arXiv", type: "API", desc: "cs.AI / cs.CL / cs.LG 最新论文" },
-  { name: "IT之家", type: "RSS", desc: "中文科技新闻" },
-  { name: "机器之心", type: "RSS", desc: "AI 专业媒体" },
   { name: "量子位", type: "RSS", desc: "AI 前沿资讯" },
-  { name: "Hugging Face Blog", type: "RSS", desc: "开源 AI 生态" },
   { name: "GitHub Blog", type: "RSS", desc: "开发者平台动态" },
   { name: "BAIR Blog", type: "RSS", desc: "伯克利 AI 研究" },
-  { name: "X / Twitter", type: "RSSHub", desc: "AI 领域关键人物推文" },
+  { name: "TechCrunch AI", type: "RSS", desc: "科技媒体 AI 报道" },
+  { name: "Claude Code Releases", type: "RSS", desc: "Anthropic 产品更新" },
+  { name: "X / Twitter", type: "RSS", desc: "AI 领域关键人物推文" },
 ];
 
 export default function AboutPage() {

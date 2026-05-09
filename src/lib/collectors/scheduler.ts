@@ -3,7 +3,6 @@ import { fetchRssSource } from "./rss";
 import { fetchXUser } from "./x";
 import { fetchHackerNews } from "./hn";
 import { fetchArxiv } from "./arxiv";
-import { fetchWebSource } from "./web-scraper";
 import type { RawItem } from "./types";
 
 export async function runAllCollectors(): Promise<{
@@ -51,18 +50,6 @@ export async function runAllCollectors(): Promise<{
           break;
         case "arxiv":
           rawItems = await withRetry(() => fetchArxiv(source.id));
-          break;
-        case "web":
-          if (source.url) {
-            rawItems = await withRetry(() =>
-              fetchWebSource({
-                id: source.id,
-                url: source.url!,
-                name: source.name,
-                type: "generic",
-              }),
-            );
-          }
           break;
       }
 
@@ -164,13 +151,6 @@ export async function runAllCollectorsStreaming(
               break;
             case "arxiv":
               rawItems = await withRetry(() => fetchArxiv(source.id));
-              break;
-            case "web":
-              if (source.url) {
-                rawItems = await withRetry(() =>
-                  fetchWebSource({ id: source.id, url: source.url!, name: source.name, type: "generic" }),
-                );
-              }
               break;
           }
 
