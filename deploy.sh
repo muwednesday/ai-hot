@@ -15,7 +15,7 @@ sleep 5
 
 # 3. 推送表结构
 echo "📋 创建数据库表..."
-docker compose run --rm -e DATABASE_URL="postgresql://postgres:aihot_pg_2026@db:5432/aihot" app \
+docker compose run --rm app \
   npx prisma db push --skip-generate 2>/dev/null || \
   docker compose exec -T db psql -U postgres -c "SELECT 1" && echo "  表已存在"
 

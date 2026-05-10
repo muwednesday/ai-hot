@@ -5,10 +5,6 @@ services:
       - "3000:3000"
     env_file:
       - .env.docker
-    environment:
-      - DATABASE_URL=postgresql://postgres:aihot_pg_2026@db:5432/aihot
-      - DIRECT_URL=postgresql://postgres:aihot_pg_2026@db:5432/aihot
-      - DEEPSEEK_MODEL=deepseek-chat
     depends_on:
       db:
         condition: service_healthy
@@ -17,9 +13,9 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=aihot_pg_2026
-      - POSTGRES_DB=aihot
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - POSTGRES_DB=${POSTGRES_DB:-aihot}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
