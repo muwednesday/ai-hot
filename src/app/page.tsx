@@ -11,14 +11,17 @@ import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
+const PAGE_SIZE = 30;
+
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; q?: string }>;
+  searchParams: Promise<{ category?: string; q?: string; page?: string }>;
 }) {
   const params = await searchParams;
   const category = params.category ?? undefined;
   const q = params.q ?? undefined;
+  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
 
   return (
     <>
@@ -41,7 +44,7 @@ export default async function HomePage({
         </div>
 
         <Suspense fallback={<FeedSkeleton />}>
-          <FeedContent category={category} q={q} />
+          <FeedContent category={category} q={q} page={page} />
         </Suspense>
       </main>
       <Footer />
@@ -52,9 +55,11 @@ export default async function HomePage({
 async function FeedContent({
   category,
   q,
+  page,
 }: {
   category?: string;
   q?: string;
+  page: number;
 }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: any = {
@@ -70,12 +75,16 @@ async function FeedContent({
     ];
   }
 
-  const items = await prisma.item.findMany({
-    where,
-    include: { source: { select: { name: true } } },
-    orderBy: { publishedAt: "desc" },
-    take: 50,
-  });
+  const [items, total] = await Promise.all([
+    prisma.item.findMany({
+      where,
+      include: { source: { select: { name: true } } },
+      orderBy: { publishedAt: "desc" },
+      take: PAGE_SIZE,
+      skip: (page - 1) * PAGE_SIZE,
+    }),
+    prisma.item.count({ where }),
+  ]);
 
   if (items.length === 0) {
     return (
@@ -86,6 +95,7 @@ async function FeedContent({
     );
   }
 
+  const totalPages = Math.ceil(total / PAGE_SIZE);
   const grouped = groupByDate(items);
 
   return (
@@ -100,6 +110,32 @@ async function FeedContent({
           </div>
         </section>
       ))}
+
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          {Array.from({ length: totalPages }, (_, i) => i + 1)
+            .filter(
+              (p) => Math.abs(p - page) <= 2 || p === 1 || p === totalPages,
+            )
+            .map((p, i, arr) => (
+              <span key={p}>
+                {i > 0 && arr[i - 1] !== p - 1 && (
+                  <span className="px-2 text-muted-foreground">...</span>
+                )}
+                <a
+                  href={`/?${category ? `category=${category}&` : ""}${q ? `q=${q}&` : ""}page=${p}`}
+                  className={`inline-flex items-center justify-center px-3 py-1 rounded-md text-sm transition-colors ${
+                    p === page
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary hover:bg-secondary/80"
+                  }`}
+                >
+                  {p}
+                </a>
+              </span>
+            ))}
+        </div>
+      )}
     </>
   );
 }
